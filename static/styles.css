@@ -7,7 +7,7 @@
 body {
     font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     min-height: 100vh;
-    background: linear-gradient(145deg, #c7d2e8 0%, #dfe6f2 25%, #e8edf5 50%, #d4dce8 75%, #bbc8dc 100%);
+    background: linear-gradient(145deg, #ffffff 0%, #f2dcff 25%, #e9cfff 50%, #eeb2f6 75%, #b488c6 100%);
     background-attachment: fixed;
     padding: 40px;
     display: flex;
