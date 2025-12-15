@@ -46,8 +46,34 @@
 
         // Format currency
         function formatCurrency(value) {
-            return '$' + value.toLocaleString('en-US');
+            return '$' + Math.round(value).toLocaleString('en-US');
         }
+
+        // Smooth number animation using requestAnimationFrame
+        function animateValue(element, start, end, duration) {
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Ease-out cubic for smooth deceleration
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const currentValue = start + (end - start) * easeOut;
+                
+                element.textContent = formatCurrency(currentValue);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        // Track displayed values for animation
+        let displayedTotal = revenueData.totalRevenue;
+        let displayedDaily = revenueData.dailyRevenue;
 
         // Update display values
         document.getElementById('totalRevenue').textContent = formatCurrency(revenueData.totalRevenue);
@@ -159,6 +185,23 @@
             revenueChart.data.datasets[0].data = newValues;
             revenueChart.update();
         }
+
+        // Auto-increment revenue every 5 seconds by random $20-$50 with smooth animation
+        setInterval(function() {
+            const increment = Math.floor(Math.random() * 31) + 20; // Random 20-50
+            
+            const oldTotal = displayedTotal;
+            const oldDaily = displayedDaily;
+            
+            revenueData.totalRevenue += increment;
+            revenueData.dailyRevenue += increment;
+            displayedTotal = revenueData.totalRevenue;
+            displayedDaily = revenueData.dailyRevenue;
+            
+            // Animate the numbers rolling up (1800ms duration for smoother effect)
+            animateValue(document.getElementById('totalRevenue'), oldTotal, displayedTotal, 1800);
+            animateValue(document.getElementById('dailyRevenue'), oldDaily, displayedDaily, 1800);
+        }, 5000);
     </script>
 </body>
 </html>
