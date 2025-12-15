@@ -201,6 +201,11 @@
             // Animate the numbers rolling up (1800ms duration for smoother effect)
             animateValue(document.getElementById('totalRevenue'), oldTotal, displayedTotal, 1800);
             animateValue(document.getElementById('dailyRevenue'), oldDaily, displayedDaily, 1800);
+            
+            // Update the chart's last data point to match the new total revenue
+            const chartData = revenueChart.data.datasets[0].data;
+            chartData[chartData.length - 1] = revenueData.totalRevenue;
+            revenueChart.update('none'); // 'none' disables animation for smoother incremental updates
         }, 5000);
     </script>
 </body>
