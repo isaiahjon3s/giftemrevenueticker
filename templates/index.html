@@ -187,7 +187,10 @@
         }
 
         // Auto-increment revenue every 5 seconds by random $20-$50 with smooth animation
-        setInterval(function() {
+        let isPaused = false;
+        let intervalId = null;
+        
+        function incrementRevenue() {
             const increment = Math.floor(Math.random() * 31) + 20; // Random 20-50
             
             const oldTotal = displayedTotal;
@@ -206,7 +209,38 @@
             const chartData = revenueChart.data.datasets[0].data;
             chartData[chartData.length - 1] = revenueData.totalRevenue;
             revenueChart.update('none'); // 'none' disables animation for smoother incremental updates
-        }, 5000);
+        }
+        
+        function startInterval() {
+            if (!intervalId) {
+                intervalId = setInterval(incrementRevenue, 5000);
+            }
+        }
+        
+        function stopInterval() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
+        
+        function togglePause(e) {
+            e.preventDefault(); // Prevent context menu
+            isPaused = !isPaused;
+            
+            if (isPaused) {
+                stopInterval();
+            } else {
+                startInterval();
+            }
+        }
+        
+        // Add right-click listeners to both revenue values
+        document.getElementById('totalRevenue').addEventListener('contextmenu', togglePause);
+        document.getElementById('dailyRevenue').addEventListener('contextmenu', togglePause);
+        
+        // Start the interval
+        startInterval();
     </script>
 </body>
 </html>
