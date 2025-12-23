@@ -59,45 +59,14 @@ def get_revenue_data(additional_months):
         'chart_values': chart_values
     }
 
-@app.route('/')
-def index():
-    return render_template("index.html", **get_revenue_data(0))
-
-@app.route('/1')
-def index1():
-    return render_template("index.html", **get_revenue_data(1))
-
-@app.route('/2')
-def index2():
-    return render_template("index.html", **get_revenue_data(2))
-
-@app.route('/3')
-def index3():
-    return render_template("index.html", **get_revenue_data(3))
-
-@app.route('/4')
-def index4():
-    return render_template("index.html", **get_revenue_data(4))
-
-@app.route('/5')
-def index5():
-    return render_template("index.html", **get_revenue_data(5))
-
-@app.route('/6')
-def index6():
-    return render_template("index.html", **get_revenue_data(6))
-
-@app.route('/7')
-def index7():
-    return render_template("index.html", **get_revenue_data(7))
-
-@app.route('/8')
-def index8():
-    return render_template("index.html", **get_revenue_data(8))
-
-@app.route('/9')
-def index9():
-    return render_template("index.html", **get_revenue_data(9))
+@app.route('/', defaults={'num': None})
+@app.route('/<num>')
+def dynamic_index(num):
+    try:
+        months = int(num)
+    except (TypeError, ValueError):
+        months = 0
+    return render_template("index.html", **get_revenue_data(months))
     
 if __name__ == '__main__':
     app.run(debug=True)
